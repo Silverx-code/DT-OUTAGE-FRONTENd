@@ -3,6 +3,7 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/access-control/page": "app/access-control/page.js",
   "/dashboard/page": "app/dashboard/page.js",
+  "/data-management/page": "app/data-management/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/login/page": "app/login/page.js",
   "/outages/page": "app/outages/page.js",

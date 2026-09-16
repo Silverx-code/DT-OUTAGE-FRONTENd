@@ -25,6 +25,15 @@ export interface DtMaster {
   isActive: boolean;
 }
 
+export interface LookupCategory {
+  categoryId?: number;
+  challengeId?: number;
+  categoryName?: string;
+  challengeName?: string;
+  active?: boolean;
+  sortOrder?: number;
+}
+
 export interface FaultCategory {
   categoryId: number;
   categoryName: string;

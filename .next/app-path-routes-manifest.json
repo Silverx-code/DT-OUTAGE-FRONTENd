@@ -3,6 +3,7 @@
   "/_not-found/page": "/_not-found",
   "/access-control/page": "/access-control",
   "/dashboard/page": "/dashboard",
+  "/data-management/page": "/data-management",
   "/favicon.ico/route": "/favicon.ico",
   "/login/page": "/login",
   "/outages/page": "/outages",

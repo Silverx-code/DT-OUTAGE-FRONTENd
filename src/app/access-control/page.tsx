@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { api } from "@/lib/api";
 import type { Role, UserSummary } from "@/lib/types";
+import Link from "next/link";
 
 const ROLE_DETAILS: Record<Role, string> = {
   USER: "Reports and restores transformer outages.",
@@ -34,6 +35,7 @@ export default function AccessControlPage() {
     <AppShell title="Access Control" subtitle="Add and manage approved Gridline users" hideNav>
       <div className="flex w-full flex-col gap-space-lg px-margin py-space-md pb-space-xl">
         <div className="rounded-xl bg-primary-fixed p-space-md text-on-primary-fixed-variant"><div className="flex items-center gap-2 font-bold"><Icon name="admin_panel_settings" size={20} /> User provisioning</div><p className="mt-2 text-body-sm">Admins can add Users. SuperAdmins can add Users, Admins, and SuperAdmins. New users must use the Entra Object ID from their Microsoft account.</p></div>
+        <Link href="/data-management" className="flex items-center justify-between rounded-xl bg-surface-container-lowest p-space-md shadow-sm"><span><span className="block text-label-lg font-bold uppercase tracking-wider">Data management</span><span className="text-body-sm text-on-surface-variant">Populate transformers, fault categories, and restoration challenges.</span></span><Icon name="arrow_forward" size={20} className="text-primary" /></Link>
         <form onSubmit={createUser} className="flex flex-col gap-space-sm rounded-xl bg-surface-container-lowest p-space-md shadow-sm">
           <h2 className="text-label-lg font-bold uppercase tracking-wider">Add user</h2>
           <input required value={form.authId} onChange={(e) => setForm({ ...form, authId: e.target.value })} placeholder="Entra Object ID" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />

@@ -54,6 +54,12 @@
       "namedRegex": "^/dashboard(?:/)?$"
     },
     {
+      "page": "/data-management",
+      "regex": "^/data\\-management(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/data\\-management(?:/)?$"
+    },
+    {
       "page": "/favicon.ico",
       "regex": "^/favicon\\.ico(?:/)?$",
       "routeKeys": {},

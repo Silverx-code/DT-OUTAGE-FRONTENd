@@ -50,6 +50,20 @@
       }
     }
   },
+  "/data-management": {
+    "hints": 64,
+    "slots": {
+      "children": {
+        "hints": 96,
+        "slots": {
+          "children": {
+            "hints": 160,
+            "slots": null
+          }
+        }
+      }
+    }
+  },
   "/login": {
     "hints": 64,
     "slots": {

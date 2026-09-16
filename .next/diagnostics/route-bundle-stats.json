@@ -1,11 +1,11 @@
 [
   {
     "route": "/report-outage",
-    "firstLoadUncompressedJsBytes": 740032,
+    "firstLoadUncompressedJsBytes": 737071,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\0s6ek89i764um.js",
       ".next\\static\\chunks\\2f2ma0bgblcbo.js",
-      ".next\\static\\chunks\\2solv5bhsqefw.js",
+      ".next\\static\\chunks\\0fxz8-qwsbiuu.js",
       ".next\\static\\chunks\\310vm2bl3xxpt.js",
       ".next\\static\\chunks\\37_3hrso1rig6.js",
       ".next\\static\\chunks\\1mh6a-0e61pyc.js",
@@ -15,11 +15,11 @@
   },
   {
     "route": "/restore-dt",
-    "firstLoadUncompressedJsBytes": 736136,
+    "firstLoadUncompressedJsBytes": 735583,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\0s6ek89i764um.js",
       ".next\\static\\chunks\\2f2ma0bgblcbo.js",
-      ".next\\static\\chunks\\2lno-ieeio_av.js",
+      ".next\\static\\chunks\\3qzm6ne5gf4bq.js",
       ".next\\static\\chunks\\310vm2bl3xxpt.js",
       ".next\\static\\chunks\\37_3hrso1rig6.js",
       ".next\\static\\chunks\\1mh6a-0e61pyc.js",
@@ -29,11 +29,25 @@
   },
   {
     "route": "/outages",
-    "firstLoadUncompressedJsBytes": 733236,
+    "firstLoadUncompressedJsBytes": 732683,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\0s6ek89i764um.js",
       ".next\\static\\chunks\\2f2ma0bgblcbo.js",
-      ".next\\static\\chunks\\39ydbzrz2xm8t.js",
+      ".next\\static\\chunks\\06nhorsm7ea5t.js",
+      ".next\\static\\chunks\\310vm2bl3xxpt.js",
+      ".next\\static\\chunks\\37_3hrso1rig6.js",
+      ".next\\static\\chunks\\1mh6a-0e61pyc.js",
+      ".next\\static\\chunks\\2e_lrwr-bf1eq.js",
+      ".next\\static\\chunks\\turbopack-33_58tvt58ulh.js"
+    ]
+  },
+  {
+    "route": "/data-management",
+    "firstLoadUncompressedJsBytes": 732548,
+    "firstLoadChunkPaths": [
+      ".next\\static\\chunks\\0s6ek89i764um.js",
+      ".next\\static\\chunks\\2f2ma0bgblcbo.js",
+      ".next\\static\\chunks\\3zhc99rge6tse.js",
       ".next\\static\\chunks\\310vm2bl3xxpt.js",
       ".next\\static\\chunks\\37_3hrso1rig6.js",
       ".next\\static\\chunks\\1mh6a-0e61pyc.js",
@@ -43,11 +57,11 @@
   },
   {
     "route": "/access-control",
-    "firstLoadUncompressedJsBytes": 731517,
+    "firstLoadUncompressedJsBytes": 732064,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\0s6ek89i764um.js",
       ".next\\static\\chunks\\2f2ma0bgblcbo.js",
-      ".next\\static\\chunks\\18t1ilrcdc7s-.js",
+      ".next\\static\\chunks\\2a1y2p_9-nfoz.js",
       ".next\\static\\chunks\\310vm2bl3xxpt.js",
       ".next\\static\\chunks\\37_3hrso1rig6.js",
       ".next\\static\\chunks\\1mh6a-0e61pyc.js",
