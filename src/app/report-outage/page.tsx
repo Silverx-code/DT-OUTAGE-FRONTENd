@@ -1,10 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { mockChallengeCategories, mockCurrentUser, mockFaultCategories } from "@/lib/mock-data";
+import { api, ApiError } from "@/lib/api";
+import type { ChallengeCategory, FaultCategory, ReportOutagePayload } from "@/lib/types";
 
 // Stand-in for the real DT lookup call (GET /api/dt-master/search?q=).
 const MOCK_DT = {
@@ -24,24 +26,67 @@ export default function ReportOutagePage() {
   const [faultDescription, setFaultDescription] = useState("");
   const [challengeId, setChallengeId] = useState<number | "">("");
   const [comment, setComment] = useState("");
+  const [dtId, setDtId] = useState<string | null>(null);
+  const [faultCategories, setFaultCategories] = useState<FaultCategory[]>(mockFaultCategories);
+  const [challengeCategories, setChallengeCategories] = useState<ChallengeCategory[]>(mockChallengeCategories);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const requiredFilled = faultCategoryId !== "" && faultDescription.trim().length >= 10;
+  const requiredFilled = Boolean(dtId) && faultCategoryId !== "" && faultDescription.trim().length >= 10;
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadReportData() {
+      try {
+        const [dtResults, categories, challenges] = await Promise.all([
+          api.get<{ dtId: string }[]>(`/dt-master/search?q=${encodeURIComponent(MOCK_DT.dtCode)}`),
+          api.get<FaultCategory[]>("/lookups/fault-categories"),
+          api.get<ChallengeCategory[]>("/lookups/challenge-categories"),
+        ]);
+        if (cancelled) return;
+        setDtId(dtResults[0]?.dtId ?? null);
+        setFaultCategories(categories);
+        setChallengeCategories(challenges);
+        if (!dtResults[0]) setError("The selected transformer could not be found.");
+      } catch {
+        if (!cancelled) setError("Could not load report data. Please check your connection and try again.");
+      }
+    }
+    void loadReportData();
+    return () => { cancelled = true; };
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!requiredFilled) return;
     setSubmitting(true);
+    setError(null);
+    const now = new Date();
+    const payload: ReportOutagePayload = {
+      dtId: dtId!,
+      outageDate: now.toISOString().slice(0, 10),
+      outageTime: now.toTimeString().slice(0, 8),
+      faultCategoryId: faultCategoryId as number,
+      faultDescription: faultDescription.trim(),
+      ...(challengeId === "" ? {} : { challengeId }),
+      ...(comment.trim() ? { additionalComment: comment.trim() } : {}),
+    };
 
     // TODO: replace with api.post<DtOutage>("/outages", payload)
     // — the backend enforces the one-active-outage-per-DT constraint and
     // returns 409 with the existing outage_ref on a clash, which the UI
     // should surface right here instead of a generic error.
-    await new Promise((r) => setTimeout(r, 500));
-
-    setSubmitting(false);
-    setSubmitted("OUT-2026-08942");
+    try {
+      const response = await api.post<{ outageRef: string }>("/outages", payload);
+      setSubmitted(response.outageRef);
+    } catch (caught) {
+      setError(caught instanceof ApiError && caught.status === 409
+        ? "This transformer already has an active outage report."
+        : "The report could not be submitted. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -136,7 +181,7 @@ export default function ReportOutagePage() {
             onChange={(e) => setFaultCategoryId(Number(e.target.value) || "")}
           >
             <option value="">Select a fault category…</option>
-            {mockFaultCategories.map((c) => (
+            {faultCategories.map((c) => (
               <option key={c.categoryId} value={c.categoryId}>
                 {c.categoryName}
               </option>
@@ -167,7 +212,7 @@ export default function ReportOutagePage() {
             onChange={(e) => setChallengeId(Number(e.target.value) || "")}
           >
             <option value="">Not yet known — can be added at restoration</option>
-            {mockChallengeCategories.map((c) => (
+            {challengeCategories.map((c) => (
               <option key={c.challengeId} value={c.challengeId}>
                 {c.challengeName}
               </option>
@@ -201,9 +246,10 @@ export default function ReportOutagePage() {
             )}
           </button>
           <span className="text-label-sm text-on-surface-variant text-center">
-            Offline queue ready • Syncs instantly when reconnecting
+            Reports are saved securely when submitted
           </span>
         </div>
+        {error && <p className="text-body-sm text-error text-center" role="alert">{error}</p>}
       </form>
 
       {submitted && (

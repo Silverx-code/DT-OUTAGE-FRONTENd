@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { AuthProvider } from "@/components/auth-provider";
 
 export const metadata: Metadata = {
   title: "Gridline — DT Outage Reporting",
@@ -41,7 +42,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-surface text-on-surface text-body-md flex flex-col min-h-screen antialiased">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

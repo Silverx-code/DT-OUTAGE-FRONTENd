@@ -17,6 +17,14 @@ export function TopHeader({ title, subtitle }: TopHeaderProps) {
             </span>
           </div>
           <div className="flex items-center gap-space-sm">
+            <a
+              href={process.env.NEXT_PUBLIC_ENTRA_PASSWORD_RESET_URL ?? "https://passwordreset.microsoftonline.com/"}
+              target="_blank"
+              rel="noreferrer"
+              className="text-label-sm font-semibold text-primary underline underline-offset-2"
+            >
+              Forgot password?
+            </a>
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
               <Icon name="person" size={18} className="text-on-primary" />
             </div>

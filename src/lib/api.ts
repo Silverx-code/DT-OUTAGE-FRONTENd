@@ -11,11 +11,10 @@
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api";
 
+import { getAccessToken } from "./msal";
+
 async function getAuthToken(): Promise<string | null> {
-  // TODO: replace with the real Entra ID access token once NextAuth (or
-  // equivalent) is wired up. Returning null lets callers fall back to mock
-  // data during scaffolding instead of failing hard.
-  return null;
+  return getAccessToken();
 }
 
 class ApiError extends Error {

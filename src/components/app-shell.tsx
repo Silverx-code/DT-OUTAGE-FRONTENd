@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { TopHeader } from "./top-header";
 import { BottomNav } from "./bottom-nav";
+import { OnboardingTour } from "./onboarding-tour";
 
 interface AppShellProps {
   title: string;
@@ -22,6 +23,7 @@ export function AppShell({ title, subtitle, children, hideNav }: AppShellProps) 
         {children}
       </main>
       {!hideNav && <BottomNav />}
+      <OnboardingTour />
     </div>
   );
 }

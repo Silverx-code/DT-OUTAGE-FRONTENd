@@ -182,7 +182,7 @@ export default function DashboardPage() {
                 Access Control
               </span>
               <span className="text-label-sm text-on-surface-variant mt-0.5 block">
-                Roles &amp; UAR Requests
+                User provisioning &amp; roles
               </span>
             </div>
           </Link>
