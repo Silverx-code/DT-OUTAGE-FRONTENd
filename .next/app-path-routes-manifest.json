@@ -1,0 +1,13 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/access-control/page": "/access-control",
+  "/access-control/requests/[id]/page": "/access-control/requests/[id]",
+  "/access-requests/new/page": "/access-requests/new",
+  "/dashboard/page": "/dashboard",
+  "/favicon.ico/route": "/favicon.ico",
+  "/outages/page": "/outages",
+  "/page": "/",
+  "/report-outage/page": "/report-outage",
+  "/restore-dt/page": "/restore-dt"
+}
