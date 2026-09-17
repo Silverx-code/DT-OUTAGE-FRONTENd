@@ -46,11 +46,12 @@ export function OnboardingTour() {
   const steps = useMemo(() => user ? (user.role === "SUPERADMIN" ? [{ title: "Full system view", text: "You have the complete Gridline administration and operations toolset.", route: "/dashboard", target: "dashboard-summary" }, ...STEPS.ADMIN] : STEPS[user.role]) : [], [user]);
 
   useEffect(() => {
-    api.get<UserSummary>("/me").then((current) => { setUser(current); if (pathname === "/dashboard" && window.localStorage.getItem("gridline-onboarding-complete") !== "true") setOpen(true); }).catch(() => undefined);
+    if (user || pathname !== "/dashboard") return;
+    api.get<UserSummary>("/me").then((current) => { setUser(current); if (window.localStorage.getItem("gridline-onboarding-complete") !== "true") setOpen(true); }).catch(() => undefined);
     const reopen = () => { setPhase("role"); setStep(0); setOpen(true); };
     window.addEventListener("gridline-open-tutorial", reopen);
     return () => window.removeEventListener("gridline-open-tutorial", reopen);
-  }, [pathname]);
+  }, [pathname, user]);
 
   useEffect(() => {
     if (!open || phase !== "tour" || !steps[step]) return;
