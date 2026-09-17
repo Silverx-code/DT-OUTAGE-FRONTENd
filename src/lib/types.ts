@@ -1,4 +1,4 @@
-export type Role = "USER" | "ADMIN" | "SUPERADMIN";
+export type Role = "USER" | "PAT" | "ADMIN" | "SUPERADMIN";
 
 export type OutageStatus = "OUT" | "RESTORED";
 

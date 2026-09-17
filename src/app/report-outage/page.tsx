@@ -58,7 +58,7 @@ export default function ReportOutagePage() {
 
   return (
     <AppShell title="Report Outage" subtitle={currentUser ? `${currentUser.fullName} — ${currentUser.role}, ${currentUser.businessUnit ?? "No business unit"}` : "Loading signed-in user…"}>
-      <form onSubmit={handleSubmit} className="flex flex-col w-full px-margin py-space-md gap-space-lg pb-space-xl">
+      <form data-tutorial="report-form" onSubmit={handleSubmit} className="flex flex-col w-full px-margin py-space-md gap-space-lg pb-space-xl">
         <div className="flex items-center gap-space-xs bg-surface-container px-space-sm py-space-xs rounded-full self-start"><Icon name="bolt" size={16} filled className="text-primary" /><span className="text-label-sm text-primary uppercase tracking-wider">Active Mode</span></div>
         <section className="flex flex-col gap-space-xs">
           <Field label="Distribution Transformer (DT) Lookup" required />

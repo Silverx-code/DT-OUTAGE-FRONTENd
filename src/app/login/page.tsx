@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { startLogin } from "@/lib/msal";
 
@@ -45,11 +44,6 @@ export default function LoginPage() {
           {!isConfigured && <p className="mt-5 rounded-lg bg-secondary-container p-3 text-label-sm text-on-secondary-container">Microsoft sign-in is not configured yet. Add the Entra client ID, tenant ID, and redirect URI to the frontend environment.</p>}
           {error && <p className="mt-5 rounded-lg bg-error-container p-3 text-label-sm text-on-error-container">{error}</p>}
 
-          <div className="my-6 h-px bg-outline-variant" />
-          <p className="text-center text-label-sm text-on-surface-variant">For demo review only</p>
-          <Link href="/dashboard" className="mt-3 flex h-11 items-center justify-center rounded-xl border-2 border-primary text-label-md font-bold text-primary">
-            Continue in demo mode
-          </Link>
         </section>
         <p className="mt-6 text-center text-label-sm text-on-surface-variant">Authorized operations personnel only</p>
       </div>

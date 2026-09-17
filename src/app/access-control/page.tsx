@@ -9,6 +9,7 @@ import Link from "next/link";
 
 const ROLE_DETAILS: Record<Role, string> = {
   USER: "Reports and restores transformer outages.",
+  PAT: "Read-only access to all submitted outage data with filtering and sorting.",
   ADMIN: "Manages users and supervises business-unit operations.",
   SUPERADMIN: "Full system administration and role management.",
 };
@@ -33,7 +34,7 @@ export default function AccessControlPage() {
 
   return (
     <AppShell title="Access Control" subtitle="Add and manage approved Gridline users" hideNav>
-      <div className="flex w-full flex-col gap-space-lg px-margin py-space-md pb-space-xl">
+      <div data-tutorial="access-control" className="flex w-full flex-col gap-space-lg px-margin py-space-md pb-space-xl">
         <div className="rounded-xl bg-primary-fixed p-space-md text-on-primary-fixed-variant"><div className="flex items-center gap-2 font-bold"><Icon name="admin_panel_settings" size={20} /> User provisioning</div><p className="mt-2 text-body-sm">Admins can add Users. SuperAdmins can add Users, Admins, and SuperAdmins. New users must use the Entra Object ID from their Microsoft account.</p></div>
         <Link href="/data-management" className="flex items-center justify-between rounded-xl bg-surface-container-lowest p-space-md shadow-sm"><span><span className="block text-label-lg font-bold uppercase tracking-wider">Data management</span><span className="text-body-sm text-on-surface-variant">Populate transformers, fault categories, and restoration challenges.</span></span><Icon name="arrow_forward" size={20} className="text-primary" /></Link>
         <form onSubmit={createUser} className="flex flex-col gap-space-sm rounded-xl bg-surface-container-lowest p-space-md shadow-sm">
@@ -42,7 +43,7 @@ export default function AccessControlPage() {
           <input required value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="Full name" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />
           <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email address" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />
           <input required value={form.businessUnit} onChange={(e) => setForm({ ...form, businessUnit: e.target.value })} placeholder="Business unit" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />
-          <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as Role })} className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm"><option value="USER">User</option><option value="ADMIN">Admin</option><option value="SUPERADMIN">SuperAdmin</option></select>
+          <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as Role })} className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm"><option value="USER">User</option><option value="PAT">PAT (read-only analytics)</option><option value="ADMIN">Admin</option><option value="SUPERADMIN">SuperAdmin</option></select>
           <p className="text-label-sm text-on-surface-variant">{ROLE_DETAILS[form.role]}</p>
           <button className="h-11 rounded-lg bg-primary text-label-md font-bold text-on-primary">Add user</button>
           {message && <p className="text-body-sm text-green-700">{message}</p>}{error && <p className="text-body-sm text-red-700">{error}</p>}
