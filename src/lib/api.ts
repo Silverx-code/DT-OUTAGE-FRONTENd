@@ -45,6 +45,9 @@ async function request<T>(
 
   if (!res.ok) {
     const body = await res.text().catch(() => "");
+    if (res.status === 401 && typeof window !== "undefined") {
+      window.dispatchEvent(new Event("gridline-unauthorized"));
+    }
     throw new ApiError(res.status, body || res.statusText);
   }
 

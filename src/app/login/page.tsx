@@ -5,6 +5,7 @@ import { startLogin } from "@/lib/msal";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
+  const reason = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("reason") : null;
   const isConfigured = Boolean(process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID && process.env.NEXT_PUBLIC_AZURE_AD_API_SCOPE);
 
   async function login() {
@@ -43,6 +44,7 @@ export default function LoginPage() {
 
           {!isConfigured && <p className="mt-5 rounded-lg bg-secondary-container p-3 text-label-sm text-on-secondary-container">Microsoft sign-in is not configured yet. Add the Entra client ID, tenant ID, and redirect URI to the frontend environment.</p>}
           {error && <p className="mt-5 rounded-lg bg-error-container p-3 text-label-sm text-on-error-container">{error}</p>}
+          {reason === "session-expired" && <p className="mt-5 rounded-lg bg-error-container p-3 text-label-sm text-on-error-container">Your session is missing or expired. Sign in again to access live outage data.</p>}
 
         </section>
         <p className="mt-6 text-center text-label-sm text-on-surface-variant">Authorized operations personnel only</p>

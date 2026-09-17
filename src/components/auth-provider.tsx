@@ -11,7 +11,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     void initializeMsal().then((account) => {
       if (account && pathname === "/login") router.replace("/dashboard");
+      if (!account && pathname !== "/login") router.replace("/login");
     }).catch((error) => console.error("Microsoft Entra initialization failed", error));
+  }, [pathname, router]);
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      if (pathname !== "/login") router.replace("/login?reason=session-expired");
+    };
+    window.addEventListener("gridline-unauthorized", handleUnauthorized);
+    return () => window.removeEventListener("gridline-unauthorized", handleUnauthorized);
   }, [pathname, router]);
 
   return children;
