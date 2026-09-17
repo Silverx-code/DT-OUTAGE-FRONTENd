@@ -43,7 +43,13 @@ export async function startLogin() {
   if (!process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID || !apiScope) {
     throw new Error("Microsoft Entra login is not configured. Set the Entra client ID and API scope.");
   }
-  await msalInstance.loginRedirect({ scopes: ["openid", "profile", "email", apiScope] });
+  await msalInstance.loginRedirect({
+    scopes: ["openid", "profile", "email", apiScope],
+    // The backend API's delegated scope is consented by the signed-in user
+    // in this tenant. Prompting explicitly prevents a stale cached session
+    // from silently returning only an ID token.
+    prompt: "consent",
+  });
 }
 
 export async function getAccessToken(): Promise<string | null> {
