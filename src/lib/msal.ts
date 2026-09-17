@@ -44,7 +44,7 @@ export async function startLogin() {
     throw new Error("Microsoft Entra login is not configured. Set the Entra client ID and API scope.");
   }
   await msalInstance.loginRedirect({
-    scopes: ["openid", "profile", "email", apiScope],
+    scopes: ["openid", "profile", "email", "offline_access", apiScope],
     // The backend API's delegated scope is consented by the signed-in user
     // in this tenant. Prompting explicitly prevents a stale cached session
     // from silently returning only an ID token.
@@ -60,11 +60,11 @@ export async function getAccessToken(): Promise<string | null> {
   msalInstance.setActiveAccount(account);
 
   try {
-    const result = await msalInstance.acquireTokenSilent({ account, scopes: [apiScope] });
+    const result = await msalInstance.acquireTokenSilent({ account, scopes: ["offline_access", apiScope] });
     return result.accessToken;
   } catch (error) {
     if (error instanceof InteractionRequiredAuthError) {
-      await msalInstance.acquireTokenRedirect({ scopes: [apiScope] });
+      await msalInstance.acquireTokenRedirect({ scopes: ["offline_access", apiScope] });
     }
     return null;
   }

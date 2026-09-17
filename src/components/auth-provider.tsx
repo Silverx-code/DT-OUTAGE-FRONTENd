@@ -2,25 +2,18 @@
 
 import { ReactNode, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { getAccessToken, initializeMsal } from "@/lib/msal";
+import { initializeMsal } from "@/lib/msal";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    void initializeMsal().then(async (account) => {
+    void initializeMsal().then((account) => {
       if (!account) {
         if (pathname !== "/login") router.replace("/login");
         return;
       }
-
-      const token = await getAccessToken();
-      if (!token) {
-        if (pathname !== "/login") router.replace("/login?reason=session-expired");
-        return;
-      }
-
       if (pathname === "/login") router.replace("/dashboard");
     }).catch((error) => console.error("Microsoft Entra initialization failed", error));
   }, [pathname, router]);
