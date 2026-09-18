@@ -32,6 +32,16 @@ export default function AccessControlPage() {
     } catch (err) { setError(err instanceof Error ? err.message : "User could not be added."); }
   }
 
+  async function removeUser(user: UserSummary) {
+    if (!window.confirm(`Remove ${user.fullName}'s access? Their records will be preserved.`)) return;
+    setError(""); setMessage("");
+    try {
+      await api.delete(`/users/${user.userId}`);
+      setMessage(`${user.fullName} removed.`);
+      await loadUsers();
+    } catch (err) { setError(err instanceof Error ? err.message : "User could not be removed."); }
+  }
+
   return (
     <AppShell title="Access Control" subtitle="Add and manage approved Gridline users" hideNav>
       <div data-tutorial="access-control" className="flex w-full flex-col gap-space-lg px-margin py-space-md pb-space-xl">
@@ -47,7 +57,7 @@ export default function AccessControlPage() {
           <button className="h-11 rounded-lg bg-primary text-label-md font-bold text-on-primary">Add user</button>
           {message && <p className="text-body-sm text-green-700">{message}</p>}{error && <p className="text-body-sm text-red-700">{error}</p>}
         </form>
-        <div className="flex flex-col gap-space-sm"><h2 className="text-label-lg font-bold uppercase tracking-wider">User directory</h2>{users.map((user) => <div key={user.userId} className="flex items-center justify-between rounded-xl bg-surface-container-lowest p-space-md shadow-sm"><div><p className="font-semibold">{user.fullName}</p><p className="text-body-sm text-on-surface-variant">{user.email} · {user.businessUnit}</p></div><span className="rounded bg-primary-fixed px-2 py-1 text-label-sm font-bold">{user.role}</span></div>)}</div>
+        <div className="flex flex-col gap-space-sm"><h2 className="text-label-lg font-bold uppercase tracking-wider">User directory</h2>{users.map((user) => <div key={user.userId} className="flex items-center justify-between gap-space-sm rounded-xl bg-surface-container-lowest p-space-md shadow-sm"><div><p className="font-semibold">{user.fullName}</p><p className="text-body-sm text-on-surface-variant">{user.email} · {user.businessUnit}</p><p className={`text-label-sm font-semibold ${user.isActive ? "text-green-700" : "text-red-700"}`}>{user.isActive ? "Active" : "Removed"}</p></div><div className="flex items-center gap-space-sm"><span className="rounded bg-primary-fixed px-2 py-1 text-label-sm font-bold">{user.role}</span>{user.isActive && <button type="button" onClick={() => void removeUser(user)} className="rounded-lg border border-red-200 px-3 py-2 text-label-sm font-bold text-red-700 hover:bg-red-50">Remove</button>}</div></div>)}</div>
       </div>
     </AppShell>
   );

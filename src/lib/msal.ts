@@ -7,7 +7,7 @@ import {
 } from "@azure/msal-browser";
 
 const clientId = process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID ?? "missing-client-id";
-const tenantId = process.env.NEXT_PUBLIC_AZURE_AD_TENANT_ID ?? "common";
+const tenantId = process.env.NEXT_PUBLIC_AZURE_AD_TENANT_ID ?? "organizations";
 const redirectUri = process.env.NEXT_PUBLIC_AZURE_AD_REDIRECT_URI ?? "http://localhost:3000/login";
 const apiScope = process.env.NEXT_PUBLIC_AZURE_AD_API_SCOPE ?? "";
 
