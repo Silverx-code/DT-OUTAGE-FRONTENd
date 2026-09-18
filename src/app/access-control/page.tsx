@@ -18,7 +18,7 @@ export default function AccessControlPage() {
   const [users, setUsers] = useState<UserSummary[]>([]);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [form, setForm] = useState({ authId: "", fullName: "", email: "", role: "USER" as Role, businessUnit: "" });
+  const [form, setForm] = useState({ fullName: "", email: "", role: "USER" as Role, businessUnit: "" });
 
   const loadUsers = () => api.get<UserSummary[]>("/users").then(setUsers).catch(() => setError("Users could not be loaded. Confirm that you are an active Admin or SuperAdmin."));
   useEffect(() => { void loadUsers(); }, []);
@@ -27,7 +27,7 @@ export default function AccessControlPage() {
     event.preventDefault(); setError(""); setMessage("");
     try {
       await api.post<UserSummary>("/users", form);
-      setForm({ authId: "", fullName: "", email: "", role: "USER", businessUnit: "" });
+      setForm({ fullName: "", email: "", role: "USER", businessUnit: "" });
       setMessage("User added successfully."); await loadUsers();
     } catch (err) { setError(err instanceof Error ? err.message : "User could not be added."); }
   }
@@ -35,11 +35,10 @@ export default function AccessControlPage() {
   return (
     <AppShell title="Access Control" subtitle="Add and manage approved Gridline users" hideNav>
       <div data-tutorial="access-control" className="flex w-full flex-col gap-space-lg px-margin py-space-md pb-space-xl">
-        <div className="rounded-xl bg-primary-fixed p-space-md text-on-primary-fixed-variant"><div className="flex items-center gap-2 font-bold"><Icon name="admin_panel_settings" size={20} /> User provisioning</div><p className="mt-2 text-body-sm">Admins can add Users. SuperAdmins can add Users, Admins, and SuperAdmins. New users must use the Entra Object ID from their Microsoft account.</p></div>
+        <div className="rounded-xl bg-primary-fixed p-space-md text-on-primary-fixed-variant"><div className="flex items-center gap-2 font-bold"><Icon name="admin_panel_settings" size={20} /> User provisioning</div><p className="mt-2 text-body-sm">Admins can add Users. SuperAdmins can add Users, Admins, and SuperAdmins. Add the user&apos;s Microsoft email; their account is securely linked when they sign in for the first time.</p></div>
         <Link href="/data-management" className="flex items-center justify-between rounded-xl bg-surface-container-lowest p-space-md shadow-sm"><span><span className="block text-label-lg font-bold uppercase tracking-wider">Data management</span><span className="text-body-sm text-on-surface-variant">Populate transformers, fault categories, and restoration challenges.</span></span><Icon name="arrow_forward" size={20} className="text-primary" /></Link>
         <form onSubmit={createUser} className="flex flex-col gap-space-sm rounded-xl bg-surface-container-lowest p-space-md shadow-sm">
           <h2 className="text-label-lg font-bold uppercase tracking-wider">Add user</h2>
-          <input required value={form.authId} onChange={(e) => setForm({ ...form, authId: e.target.value })} placeholder="Entra Object ID" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />
           <input required value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="Full name" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />
           <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email address" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />
           <input required value={form.businessUnit} onChange={(e) => setForm({ ...form, businessUnit: e.target.value })} placeholder="Business unit" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />
