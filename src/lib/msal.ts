@@ -11,6 +11,14 @@ const tenantId = process.env.NEXT_PUBLIC_AZURE_AD_TENANT_ID ?? "common";
 const redirectUri = process.env.NEXT_PUBLIC_AZURE_AD_REDIRECT_URI ?? "http://localhost:3000/login";
 const apiScope = process.env.NEXT_PUBLIC_AZURE_AD_API_SCOPE ?? "";
 
+// Silent token acquisition runs in a hidden iframe. Keep that iframe on a
+// static page so it cannot boot the full Next.js app and recursively invoke
+// MSAL initialization.
+const silentRedirectUri =
+  typeof window !== "undefined"
+    ? `${window.location.origin}/msal-redirect.html`
+    : undefined;
+
 const msalConfig: Configuration = {
   auth: {
     clientId,
@@ -77,7 +85,11 @@ export async function getAccessToken(): Promise<string | null> {
   msalInstance.setActiveAccount(account);
 
   try {
-    const result = await msalInstance.acquireTokenSilent({ account, scopes: [apiScope] });
+    const result = await msalInstance.acquireTokenSilent({
+      account,
+      scopes: [apiScope],
+      redirectUri: silentRedirectUri,
+    });
     console.info("[auth] Access token acquired silently", {
       authenticated: true,
       tokenAcquired: Boolean(result.accessToken),
