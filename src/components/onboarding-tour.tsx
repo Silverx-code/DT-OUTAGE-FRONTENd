@@ -48,10 +48,13 @@ export function OnboardingTour() {
   useEffect(() => {
     if (user || pathname !== "/dashboard") return;
     api.get<UserSummary>("/me").then((current) => { setUser(current); if (window.localStorage.getItem("gridline-onboarding-complete") !== "true") setOpen(true); }).catch(() => undefined);
+  }, [pathname, user]);
+
+  useEffect(() => {
     const reopen = () => { setPhase("role"); setStep(0); setOpen(true); };
     window.addEventListener("gridline-open-tutorial", reopen);
     return () => window.removeEventListener("gridline-open-tutorial", reopen);
-  }, [pathname, user]);
+  }, []);
 
   useEffect(() => {
     if (!open || phase !== "tour" || !steps[step]) return;

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/components/auth-provider";
+import { OnboardingTour } from "@/components/onboarding-tour";
 
 export const metadata: Metadata = {
   title: "Gridline — DT Outage Reporting",
@@ -42,7 +43,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-surface text-on-surface text-body-md flex flex-col min-h-screen antialiased">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>{children}<OnboardingTour /></AuthProvider>
       </body>
     </html>
   );
