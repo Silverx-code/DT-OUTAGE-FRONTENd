@@ -10,6 +10,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     void initializeMsal().then((account) => {
+      console.info("[auth] Route guard evaluated", {
+        pathname,
+        authenticated: Boolean(account),
+        automaticRedirect: !account && pathname !== "/login" || Boolean(account) && pathname === "/login",
+      });
       if (!account) {
         if (pathname !== "/login") router.replace("/login");
         return;
@@ -20,7 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const handleUnauthorized = () => {
-      if (pathname !== "/login") router.replace("/login?reason=session-expired");
+      console.warn("[auth] API unauthorized event received; redirect suppressed", { pathname });
     };
     window.addEventListener("gridline-unauthorized", handleUnauthorized);
     return () => window.removeEventListener("gridline-unauthorized", handleUnauthorized);

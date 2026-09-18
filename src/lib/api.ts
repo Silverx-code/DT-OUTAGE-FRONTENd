@@ -11,8 +11,6 @@
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api";
 
-let unauthorizedRedirectStarted = false;
-
 import { getAccessToken } from "./msal";
 
 async function getAuthToken(): Promise<string | null> {
@@ -34,8 +32,10 @@ async function request<T>(
   options: RequestInit = {},
 ): Promise<T> {
   const token = await getAuthToken();
+  const url = `${API_BASE_URL}${path}`;
+  console.info("[api] Request", { method: options.method ?? "GET", endpoint: url, tokenAttached: Boolean(token) });
 
-  const res = await fetch(`${API_BASE_URL}${path}`, {
+  const res = await fetch(url, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -48,11 +48,12 @@ async function request<T>(
   if (!res.ok) {
     const body = await res.text().catch(() => "");
     if (res.status === 401 && typeof window !== "undefined") {
+      console.warn("[api] 401 Unauthorized", {
+        endpoint: url,
+        tokenAttached: Boolean(token),
+        automaticRedirect: false,
+      });
       window.dispatchEvent(new Event("gridline-unauthorized"));
-      if (window.location.pathname !== "/login" && !unauthorizedRedirectStarted) {
-        unauthorizedRedirectStarted = true;
-        window.location.assign("/login?reason=session-expired");
-      }
     }
     throw new ApiError(res.status, body || res.statusText);
   }
