@@ -2,19 +2,15 @@
  * Thin fetch wrapper around the Spring Boot backend.
  *
  * NEXT_PUBLIC_API_BASE_URL should point at the Spring app, e.g.
- * http://localhost:8080/api during local dev. The bearer token comes from
- * whatever auth flow wraps this (NextAuth session, etc.) — wire it up in
- * getAuthToken() once auth is in place. Until then this throws in a way
- * that's easy to spot rather than silently sending unauthenticated calls.
+ * http://localhost:8080/api during local dev. A local JWT is held in
+ * sessionStorage and sent as a bearer token.
  */
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api";
 
-import { getAccessToken } from "./msal";
-
 async function getAuthToken(): Promise<string | null> {
-  return getAccessToken();
+  return typeof window === "undefined" ? null : sessionStorage.getItem("gridline_token");
 }
 
 class ApiError extends Error {
@@ -53,7 +49,7 @@ async function request<T>(
         tokenAttached: Boolean(token),
         automaticRedirect: false,
       });
-      window.dispatchEvent(new Event("gridline-unauthorized"));
+      sessionStorage.removeItem("gridline_token"); window.dispatchEvent(new Event("gridline-unauthorized"));
     }
     throw new ApiError(res.status, body || res.statusText);
   }

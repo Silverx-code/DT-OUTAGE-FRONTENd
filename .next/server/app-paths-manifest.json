@@ -5,9 +5,12 @@
   "/access-control/page": "app/access-control/page.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/data-management/page": "app/data-management/page.js",
+  "/forgot-password/page": "app/forgot-password/page.js",
   "/login/page": "app/login/page.js",
   "/outages/page": "app/outages/page.js",
   "/page": "app/page.js",
   "/report-outage/page": "app/report-outage/page.js",
-  "/restore-dt/page": "app/restore-dt/page.js"
+  "/reset-password/page": "app/reset-password/page.js",
+  "/restore-dt/page": "app/restore-dt/page.js",
+  "/transformers/page": "app/transformers/page.js"
 }

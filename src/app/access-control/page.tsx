@@ -1,64 +1,9 @@
 "use client";
-
 import { FormEvent, useEffect, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { api } from "@/lib/api";
 import type { Role, UserSummary } from "@/lib/types";
 import Link from "next/link";
-
-const ROLE_DETAILS: Record<Role, string> = {
-  USER: "Reports and restores transformer outages.",
-  PAT: "Read-only access to all submitted outage data with filtering and sorting.",
-  ADMIN: "Manages users and supervises business-unit operations.",
-  SUPERADMIN: "Full system administration and role management.",
-};
-
-export default function AccessControlPage() {
-  const [users, setUsers] = useState<UserSummary[]>([]);
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  const [form, setForm] = useState({ fullName: "", email: "", role: "USER" as Role, businessUnit: "" });
-
-  const loadUsers = () => api.get<UserSummary[]>("/users").then(setUsers).catch(() => setError("Users could not be loaded. Confirm that you are an active Admin or SuperAdmin."));
-  useEffect(() => { void loadUsers(); }, []);
-
-  async function createUser(event: FormEvent) {
-    event.preventDefault(); setError(""); setMessage("");
-    try {
-      await api.post<UserSummary>("/users", form);
-      setForm({ fullName: "", email: "", role: "USER", businessUnit: "" });
-      setMessage("User added successfully."); await loadUsers();
-    } catch (err) { setError(err instanceof Error ? err.message : "User could not be added."); }
-  }
-
-  async function removeUser(user: UserSummary) {
-    if (!window.confirm(`Remove ${user.fullName}'s access? Their records will be preserved.`)) return;
-    setError(""); setMessage("");
-    try {
-      await api.delete(`/users/${user.userId}`);
-      setMessage(`${user.fullName} removed.`);
-      await loadUsers();
-    } catch (err) { setError(err instanceof Error ? err.message : "User could not be removed."); }
-  }
-
-  return (
-    <AppShell title="Access Control" subtitle="Add and manage approved Gridline users" hideNav>
-      <div data-tutorial="access-control" className="flex w-full flex-col gap-space-lg px-margin py-space-md pb-space-xl">
-        <div className="rounded-xl bg-primary-fixed p-space-md text-on-primary-fixed-variant"><div className="flex items-center gap-2 font-bold"><Icon name="admin_panel_settings" size={20} /> User provisioning</div><p className="mt-2 text-body-sm">Admins can add Users. SuperAdmins can add Users, Admins, and SuperAdmins. Add the user&apos;s Microsoft email; their account is securely linked when they sign in for the first time.</p></div>
-        <Link href="/data-management" className="flex items-center justify-between rounded-xl bg-surface-container-lowest p-space-md shadow-sm"><span><span className="block text-label-lg font-bold uppercase tracking-wider">Data management</span><span className="text-body-sm text-on-surface-variant">Populate transformers, fault categories, and restoration challenges.</span></span><Icon name="arrow_forward" size={20} className="text-primary" /></Link>
-        <form onSubmit={createUser} className="flex flex-col gap-space-sm rounded-xl bg-surface-container-lowest p-space-md shadow-sm">
-          <h2 className="text-label-lg font-bold uppercase tracking-wider">Add user</h2>
-          <input required value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="Full name" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />
-          <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email address" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />
-          <input required value={form.businessUnit} onChange={(e) => setForm({ ...form, businessUnit: e.target.value })} placeholder="Business unit" className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm" />
-          <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as Role })} className="h-11 rounded-lg border border-outline-variant bg-surface px-3 text-body-sm"><option value="USER">User</option><option value="PAT">PAT (read-only analytics)</option><option value="ADMIN">Admin</option><option value="SUPERADMIN">SuperAdmin</option></select>
-          <p className="text-label-sm text-on-surface-variant">{ROLE_DETAILS[form.role]}</p>
-          <button className="h-11 rounded-lg bg-primary text-label-md font-bold text-on-primary">Add user</button>
-          {message && <p className="text-body-sm text-green-700">{message}</p>}{error && <p className="text-body-sm text-red-700">{error}</p>}
-        </form>
-        <div className="flex flex-col gap-space-sm"><h2 className="text-label-lg font-bold uppercase tracking-wider">User directory</h2>{users.map((user) => <div key={user.userId} className="flex items-center justify-between gap-space-sm rounded-xl bg-surface-container-lowest p-space-md shadow-sm"><div><p className="font-semibold">{user.fullName}</p><p className="text-body-sm text-on-surface-variant">{user.email} · {user.businessUnit}</p><p className={`text-label-sm font-semibold ${user.isActive ? "text-green-700" : "text-red-700"}`}>{user.isActive ? "Active" : "Removed"}</p></div><div className="flex items-center gap-space-sm"><span className="rounded bg-primary-fixed px-2 py-1 text-label-sm font-bold">{user.role}</span>{user.isActive && <button type="button" onClick={() => void removeUser(user)} className="rounded-lg border border-red-200 px-3 py-2 text-label-sm font-bold text-red-700 hover:bg-red-50">Remove</button>}</div></div>)}</div>
-      </div>
-    </AppShell>
-  );
-}
+const ROLE_DETAILS: Record<Role,string>={USER:"Reports and restores transformer outages.",PAT:"Read-only access to outage data.",ADMIN:"Manages users and operations.",SUPERADMIN:"Full system administration."};
+export default function AccessControlPage(){const [users,setUsers]=useState<UserSummary[]>([]);const [error,setError]=useState("");const [message,setMessage]=useState("");const [form,setForm]=useState({fullName:"",email:"",role:"USER" as Role,businessUnit:""});const loadUsers=()=>api.get<UserSummary[]>("/users").then(setUsers).catch(()=>setError("Users could not be loaded."));useEffect(()=>{void loadUsers();},[]);async function createUser(e:FormEvent){e.preventDefault();setError("");try{await api.post("/users",form);setForm({fullName:"",email:"",role:"USER",businessUnit:""});setMessage("User added successfully.");await loadUsers();}catch(err){setError(err instanceof Error?err.message:"User could not be added.");}}async function removeUser(user:UserSummary){if(!window.confirm(`Remove ${user.fullName}'s access?`))return;try{await api.delete(`/users/${user.userId}`);setMessage(`${user.fullName} removed.`);await loadUsers();}catch{setError("User could not be removed.");}}async function resetPassword(user:UserSummary){try{await api.post(`/users/${user.userId}/reset-password`,{});setMessage(`A password reset link was sent to ${user.email}.`);}catch{setError("Password reset could not be started.");}}return <AppShell title="Access Control" subtitle="Add and manage approved Gridline users" hideNav><div className="flex w-full flex-col gap-space-lg px-margin py-space-md pb-space-xl"><div className="rounded-xl bg-primary-fixed p-space-md text-on-primary-fixed-variant"><div className="flex items-center gap-2 font-bold"><Icon name="admin_panel_settings" size={20}/> User provisioning</div><p className="mt-2 text-body-sm">New users receive a secure password-reset email.</p></div><Link href="/data-management" className="flex items-center justify-between rounded-xl bg-surface-container-lowest p-space-md shadow-sm"><span><span className="block font-bold uppercase">Data management</span><span className="text-body-sm text-on-surface-variant">Manage transformer and lookup data.</span></span><Icon name="arrow_forward" size={20}/></Link><form onSubmit={createUser} className="flex flex-col gap-space-sm rounded-xl bg-surface-container-lowest p-space-md shadow-sm"><h2 className="font-bold uppercase">Add user</h2><input required value={form.fullName} onChange={e=>setForm({...form,fullName:e.target.value})} placeholder="Full name" className="h-11 rounded-lg border bg-surface px-3"/><input required type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="Email address" className="h-11 rounded-lg border bg-surface px-3"/><input required value={form.businessUnit} onChange={e=>setForm({...form,businessUnit:e.target.value})} placeholder="Business unit" className="h-11 rounded-lg border bg-surface px-3"/><select value={form.role} onChange={e=>setForm({...form,role:e.target.value as Role})} className="h-11 rounded-lg border bg-surface px-3"><option value="USER">User</option><option value="PAT">PAT</option><option value="ADMIN">Admin</option><option value="SUPERADMIN">SuperAdmin</option></select><p className="text-label-sm text-on-surface-variant">{ROLE_DETAILS[form.role]}</p><button className="h-11 rounded-lg bg-primary font-bold text-on-primary">Add user</button></form>{message&&<p className="text-body-sm text-green-700">{message}</p>}{error&&<p className="text-body-sm text-red-700">{error}</p>}<div className="flex flex-col gap-space-sm"><h2 className="font-bold uppercase">User directory</h2>{users.map(user=><div key={user.userId} className="flex items-center justify-between gap-2 rounded-xl bg-surface-container-lowest p-space-md shadow-sm"><div><p className="font-semibold">{user.fullName}</p><p className="text-body-sm text-on-surface-variant">{user.email} · {user.businessUnit}</p><p className="text-label-sm">{user.isActive?"Active":"Removed"} · {user.role}</p></div>{user.isActive&&<div className="flex gap-2"><button type="button" onClick={()=>void resetPassword(user)} className="rounded-lg border border-primary px-3 py-2 text-label-sm font-bold text-primary">Reset password</button><button type="button" onClick={()=>void removeUser(user)} className="rounded-lg border border-red-200 px-3 py-2 text-label-sm font-bold text-red-700">Remove</button></div>}</div>)}</div></div></AppShell>}

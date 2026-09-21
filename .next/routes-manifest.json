@@ -66,6 +66,12 @@
       "namedRegex": "^/favicon\\.ico(?:/)?$"
     },
     {
+      "page": "/forgot-password",
+      "regex": "^/forgot\\-password(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/forgot\\-password(?:/)?$"
+    },
+    {
       "page": "/login",
       "regex": "^/login(?:/)?$",
       "routeKeys": {},
@@ -84,10 +90,22 @@
       "namedRegex": "^/report\\-outage(?:/)?$"
     },
     {
+      "page": "/reset-password",
+      "regex": "^/reset\\-password(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/reset\\-password(?:/)?$"
+    },
+    {
       "page": "/restore-dt",
       "regex": "^/restore\\-dt(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/restore\\-dt(?:/)?$"
+    },
+    {
+      "page": "/transformers",
+      "regex": "^/transformers(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/transformers(?:/)?$"
     }
   ],
   "dataRoutes": [],

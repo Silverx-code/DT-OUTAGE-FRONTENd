@@ -1,8 +1,4 @@
 {
-  "..\\node_modules\\@azure\\msal-browser\\dist\\telemetry\\BrowserPerformanceClient.mjs -> ./BrowserPerformanceMeasurement.mjs": {
-    "id": null,
-    "files": []
-  },
   "..\\node_modules\\next\\dist\\client\\index.js -> ../pages/_app": {
     "id": 1966,
     "files": [

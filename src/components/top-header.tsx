@@ -18,9 +18,7 @@ export function TopHeader({ title, subtitle }: TopHeaderProps) {
           </div>
           <div className="flex items-center gap-space-sm">
             <a
-              href={process.env.NEXT_PUBLIC_ENTRA_PASSWORD_RESET_URL ?? "https://passwordreset.microsoftonline.com/"}
-              target="_blank"
-              rel="noreferrer"
+              href="/forgot-password"
               className="text-label-sm font-semibold text-primary underline underline-offset-2"
             >
               Forgot password?

@@ -5,9 +5,12 @@
   "/access-control/page": "/access-control",
   "/dashboard/page": "/dashboard",
   "/data-management/page": "/data-management",
+  "/forgot-password/page": "/forgot-password",
   "/login/page": "/login",
   "/outages/page": "/outages",
   "/page": "/",
   "/report-outage/page": "/report-outage",
-  "/restore-dt/page": "/restore-dt"
+  "/reset-password/page": "/reset-password",
+  "/restore-dt/page": "/restore-dt",
+  "/transformers/page": "/transformers"
 }
