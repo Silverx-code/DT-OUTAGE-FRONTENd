@@ -27,7 +27,10 @@ async function request<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const token = await getAuthToken();
+  // Public authentication endpoints must not receive a stale session token.
+  // An invalid bearer token can cause Spring Security to return 401 before
+  // the password-reset request is evaluated.
+  const token = path.startsWith("/auth/") ? null : await getAuthToken();
   const url = `${API_BASE_URL}${path}`;
   console.info("[api] Request", { method: options.method ?? "GET", endpoint: url, tokenAttached: Boolean(token) });
 
