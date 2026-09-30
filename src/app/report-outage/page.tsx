@@ -75,7 +75,7 @@ export default function ReportOutagePage() {
         <button type="submit" disabled={!requiredFilled || submitting} className="w-full min-h-[52px] bg-primary text-on-primary rounded-xl text-body-lg font-bold shadow-sm disabled:opacity-40">{submitting ? "Submitting…" : "Submit Report"}</button>
         {error && <p className="text-body-sm text-error text-center" role="alert">{error}</p>}
       </form>
-      {submitted && <div className="fixed inset-0 z-50 flex items-center justify-center p-gutter bg-inverse-surface/40"><div className="flex flex-col w-full max-w-sm bg-surface-container-lowest rounded-2xl p-space-lg shadow-xl gap-space-md text-center"><Icon name="check_circle" size={48} filled className="text-primary mx-auto" /><span className="text-headline-md">Outage Ticket Created</span><span className="text-label-lg text-primary font-bold">{submitted}</span><button type="button" onClick={() => router.push("/dashboard")} className="w-full min-h-[48px] bg-primary text-on-primary rounded-xl text-body-lg font-bold">Return to Dashboard</button></div></div>}
+      {submitted && <div className="fixed inset-0 z-50 flex items-center justify-center p-gutter bg-inverse-surface/40"><div className="flex flex-col w-full max-w-sm bg-surface-container-lowest rounded-2xl p-space-lg shadow-xl gap-space-md text-center"><Icon name="check_circle" size={48} filled className="text-primary mx-auto" /><span className="text-headline-md">Outage Ticket Created</span><span className="text-label-lg text-primary font-bold">{submitted}</span><button type="button" onClick={() => router.push("/outages")} className="w-full min-h-[48px] bg-primary text-on-primary rounded-xl text-body-lg font-bold">View in Report History</button></div></div>}
     </AppShell>
   );
 }
