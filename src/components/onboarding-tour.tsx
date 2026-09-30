@@ -19,18 +19,20 @@ const STEPS: Record<Role, TourStep[]> = {
     { title: "Live dashboard", text: "Monitor active outages, restoration totals, and the oldest open fault.", route: "/dashboard", target: "dashboard-summary" },
     { title: "Report an outage", text: "Search for the transformer, describe the fault, and submit the report. The system prevents duplicate active reports.", route: "/report-outage", target: "report-form" },
     { title: "Restore a transformer", text: "Select an active outage, enter the restoration time and remarks, then confirm the restoration.", route: "/restore-dt", target: "restore-form" },
-    { title: "Review history", text: "Search active and restored records to follow the history of submitted faults.", route: "/outages", target: "outage-directory" },
+    { title: "Review and export history", text: "Search and filter submitted faults, then select Export Excel to download the visible records as a spreadsheet.", route: "/outages", target: "outage-directory" },
   ],
   PAT: [
     { title: "Live dashboard", text: "See system-wide outage totals, ageing, and active transformer faults.", route: "/dashboard", target: "dashboard-summary" },
     { title: "Filter submitted data", text: "Use search, status, business-unit, and fault filters to focus the outage dataset.", route: "/outages", target: "outage-directory" },
     { title: "Arrange the data", text: "Sort by date, age, transformer, or status. Use the arrow to reverse the order.", route: "/outages", target: "outage-directory" },
+    { title: "Export reports", text: "Select Export Excel to download the reports currently shown by your search and filters as a spreadsheet.", route: "/outages", target: "outage-directory" },
   ],
   ADMIN: [
     { title: "Operational view", text: "Monitor your live outage dashboard and review the current operational position.", route: "/dashboard", target: "dashboard-summary" },
     { title: "Manage users", text: "Add approved Gridline users and assign the appropriate role from Access Control.", route: "/access-control", target: "access-control" },
     { title: "Populate reference data", text: "Add transformers, fault categories, and restoration challenges in Data Management.", route: "/data-management", target: "data-management" },
-    { title: "Review submitted faults", text: "Search, filter, and sort all submitted outage records in the Outage Directory.", route: "/outages", target: "outage-directory" },
+    { title: "Review submitted faults", text: "Search, filter, and sort submitted outage records in the Outage Directory.", route: "/outages", target: "outage-directory" },
+    { title: "Export reports", text: "Select Export Excel to download the reports currently shown by your search and filters as a spreadsheet.", route: "/outages", target: "outage-directory" },
   ],
   SUPERADMIN: [],
 };
