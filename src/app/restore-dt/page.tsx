@@ -15,8 +15,8 @@ export default function RestoreDtPage() {
   const [challenges, setChallenges] = useState<ChallengeCategory[]>([]);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [time, setTime] = useState(() => new Date().toTimeString().slice(0, 5));
   const [remarks, setRemarks] = useState("");
   const [challengeId, setChallengeId] = useState<number | "">("");
   const [submitting, setSubmitting] = useState(false);
@@ -24,10 +24,12 @@ export default function RestoreDtPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    Promise.all([api.get<UserSummary>("/me"), api.get<DtOutage[]>("/outages?status=OUT"), api.get<ChallengeCategory[]>("/lookups/challenge-categories")]).then(([u, o, c]) => {
-      setUser(u); setOutages(o); setChallenges(c); setSelectedId(o[0]?.outageId ?? "");
-      const now = new Date(); setDate(now.toISOString().slice(0, 10)); setTime(now.toTimeString().slice(0, 5));
+    api.get<DtOutage[]>("/outages?status=OUT").then((activeOutages) => {
+      setOutages(activeOutages);
+      setSelectedId(activeOutages[0]?.outageId ?? "");
     }).catch(() => setError("Active outages could not be loaded."));
+    api.get<UserSummary>("/me").then(setUser).catch(() => undefined);
+    api.get<ChallengeCategory[]>("/lookups/challenge-categories").then(setChallenges).catch(() => undefined);
   }, []);
 
   const filtered = useMemo(() => outages.filter((o) => `${o.dtCodeSnapshot} ${o.outageRef} ${o.faultDescription}`.toLowerCase().includes(query.toLowerCase())), [outages, query]);

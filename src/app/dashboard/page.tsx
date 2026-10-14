@@ -13,7 +13,10 @@ export default function DashboardPage() {
   const [user, setUser] = useState<UserSummary | null>(null);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [error, setError] = useState("");
-  useEffect(() => { api.get<UserSummary>("/me").then((u) => { setUser(u); const scoped = u.role === "USER" && u.businessUnit ? `?businessUnit=${encodeURIComponent(u.businessUnit)}` : ""; return api.get<DashboardSummary>(`/dashboard/summary${scoped}`); }).then(setSummary).catch(() => setError("Dashboard data could not be loaded.")); }, []);
+  useEffect(() => {
+    api.get<UserSummary>("/me").then(setUser).catch(() => setError("Your profile could not be loaded."));
+    api.get<DashboardSummary>("/dashboard/summary").then(setSummary).catch(() => setError("Dashboard data could not be loaded."));
+  }, []);
   const total = summary?.ageingBuckets.reduce((sum, bucket) => sum + bucket.count, 0) ?? 0;
   return <AppShell title="Dashboard" subtitle={user ? `${user.fullName} — ${user.role} · ${user.businessUnit ?? "All business units"}` : "Loading live outage data…"}>
     <div data-tutorial="dashboard-summary" className="flex flex-col w-full pb-8"><div className="px-gutter pt-space-sm pb-space-xs flex items-center justify-between"><div className="flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1.5 rounded-full"><Icon name="location_city" size={18} className="text-primary" /><span className="text-label-md">{user?.businessUnit ?? "All business units"}</span></div><button type="button" onClick={() => window.dispatchEvent(new Event("gridline-open-tutorial"))} className="flex items-center gap-1 rounded-full bg-primary-fixed px-space-sm py-1.5 text-label-sm font-bold text-on-primary-fixed-variant"><Icon name="help" size={16} /> Tutorial</button></div>
