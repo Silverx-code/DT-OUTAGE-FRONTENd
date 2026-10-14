@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { clearApiCache } from "@/lib/api";
 import { Icon } from "./icon";
 
 interface TopHeaderProps {
@@ -12,6 +13,7 @@ export function TopHeader({ title, subtitle }: TopHeaderProps) {
   const router = useRouter();
   function logOut() {
     sessionStorage.removeItem("gridline_token");
+    clearApiCache();
     router.replace("/login");
   }
 

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { api, ApiError } from "@/lib/api";
+import { useStaleData } from "@/lib/use-stale-data";
 import type { ChallengeCategory, DtMaster, FaultCategory, ReportOutagePayload, UserSummary } from "@/lib/types";
 
 export default function ReportOutagePage() {
@@ -23,6 +24,10 @@ export default function ReportOutagePage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useStaleData("/me", setCurrentUser);
+  useStaleData("/lookups/fault-categories", setFaultCategories);
+  useStaleData("/lookups/challenge-categories", setChallengeCategories);
 
   const requiredFilled = Boolean(selectedDt) && faultCategoryId !== "" && faultDescription.trim().length >= 10;
 

@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { AgeingChip, OutageStatusChip } from "@/components/status-chip";
 import { api } from "@/lib/api";
+import { useStaleData } from "@/lib/use-stale-data";
 import type { DtOutage, OutageStatus, UserSummary } from "@/lib/types";
 
 type SortKey = "date" | "age" | "transformer" | "status";
@@ -64,6 +65,8 @@ export default function OutagesPage() {
   const [sort, setSort] = useState<SortKey>("date");
   const [ascending, setAscending] = useState(false);
   const [error, setError] = useState("");
+  useStaleData("/me", setUser);
+  useStaleData("/outages", setOutages);
 
   useEffect(() => { api.get<UserSummary>("/me").then(setUser).catch(() => undefined); api.get<DtOutage[]>("/outages").then(setOutages).catch(() => setError("Submitted outages could not be loaded.")); }, []);
   const businessUnits = useMemo(() => [...new Set(outages.map((o) => o.businessUnitSnapshot))].sort(), [outages]);

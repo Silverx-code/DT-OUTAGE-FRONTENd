@@ -7,12 +7,15 @@ import { MetricCard } from "@/components/metric-card";
 import { Icon } from "@/components/icon";
 import { AgeingChip, OutageStatusChip } from "@/components/status-chip";
 import { api } from "@/lib/api";
+import { useStaleData } from "@/lib/use-stale-data";
 import type { DashboardSummary, UserSummary } from "@/lib/types";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<UserSummary | null>(null);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [error, setError] = useState("");
+  useStaleData("/me", setUser);
+  useStaleData("/dashboard/summary", setSummary);
   useEffect(() => {
     api.get<UserSummary>("/me").then(setUser).catch(() => setError("Your profile could not be loaded."));
     api.get<DashboardSummary>("/dashboard/summary").then(setSummary).catch(() => setError("Dashboard data could not be loaded."));

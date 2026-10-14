@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { clearApiCache } from "@/lib/api";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -9,7 +10,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const token = sessionStorage.getItem("gridline_token"); const publicRoute = ["/login", "/forgot-password", "/reset-password"].includes(pathname);
-    if (!token && !publicRoute) router.replace("/login"); if (token && pathname === "/login") router.replace("/dashboard");
+    if (!token && !publicRoute) { clearApiCache(); router.replace("/login"); } if (token && pathname === "/login") router.replace("/dashboard");
   }, [pathname, router]);
 
   useEffect(() => {

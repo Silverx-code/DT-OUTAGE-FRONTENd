@@ -9,6 +9,26 @@
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080/api";
 
+const CACHE_PREFIX = "gridline_cache:";
+
+export function readApiCache<T>(path: string): T | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const value = sessionStorage.getItem(`${CACHE_PREFIX}${path}`);
+    return value ? (JSON.parse(value) as T) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function clearApiCache() {
+  if (typeof window === "undefined") return;
+  for (let index = sessionStorage.length - 1; index >= 0; index--) {
+    const key = sessionStorage.key(index);
+    if (key?.startsWith(CACHE_PREFIX)) sessionStorage.removeItem(key);
+  }
+}
+
 async function getAuthToken(): Promise<string | null> {
   return typeof window === "undefined" ? null : sessionStorage.getItem("gridline_token");
 }
@@ -53,6 +73,7 @@ async function request<T>(
         automaticRedirect: false,
       });
       sessionStorage.removeItem("gridline_token"); window.dispatchEvent(new Event("gridline-unauthorized"));
+      clearApiCache();
     }
     throw new ApiError(res.status, body || res.statusText);
   }
@@ -61,7 +82,11 @@ async function request<T>(
     return undefined as T;
   }
 
-  return (await res.json()) as T;
+  const data = (await res.json()) as T;
+  if ((options.method ?? "GET") === "GET" && token && sessionStorage.getItem("gridline_token") === token && !path.startsWith("/dt-master/search")) {
+    try { sessionStorage.setItem(`${CACHE_PREFIX}${path}`, JSON.stringify(data)); } catch { /* Cache is optional when session storage is full. */ }
+  }
+  return data;
 }
 
 export const api = {

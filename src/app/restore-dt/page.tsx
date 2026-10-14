@@ -6,6 +6,7 @@ import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { AgeingChip } from "@/components/status-chip";
 import { api, ApiError } from "@/lib/api";
+import { useStaleData } from "@/lib/use-stale-data";
 import type { ChallengeCategory, DtOutage, UserSummary } from "@/lib/types";
 
 export default function RestoreDtPage() {
@@ -22,6 +23,9 @@ export default function RestoreDtPage() {
   const [submitting, setSubmitting] = useState(false);
   const [restored, setRestored] = useState<DtOutage | null>(null);
   const [error, setError] = useState("");
+  useStaleData("/me", setUser);
+  useStaleData("/outages?status=OUT", setOutages);
+  useStaleData("/lookups/challenge-categories", setChallenges);
 
   useEffect(() => {
     api.get<DtOutage[]>("/outages?status=OUT").then((activeOutages) => {

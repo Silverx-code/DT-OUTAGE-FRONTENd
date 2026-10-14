@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { api } from "@/lib/api";
+import { useStaleData } from "@/lib/use-stale-data";
 import type { Role, UserSummary } from "@/lib/types";
 import Link from "next/link";
 
@@ -11,6 +12,7 @@ type ResetLinkResponse = { resetPath: string; expiresIn: string };
 
 export default function AccessControlPage() {
   const [users, setUsers] = useState<UserSummary[]>([]); const [error, setError] = useState(""); const [message, setMessage] = useState(""); const [resetLink, setResetLink] = useState(""); const [confirmUser, setConfirmUser] = useState<UserSummary | null>(null); const [removing, setRemoving] = useState(false); const [form, setForm] = useState({ fullName: "", email: "", role: "USER" as Role, businessUnit: "" });
+  useStaleData("/users", setUsers);
   const loadUsers = () => api.get<UserSummary[]>("/users").then(setUsers).catch(() => setError("Users could not be loaded."));
   useEffect(() => { void loadUsers(); }, []);
   async function createUser(event: FormEvent) { event.preventDefault(); setError(""); setMessage(""); setResetLink(""); try { await api.post("/users", form); setForm({ fullName: "", email: "", role: "USER", businessUnit: "" }); setMessage("User added successfully. Generate a reset link for the user."); await loadUsers(); } catch (err) { setError(err instanceof Error ? err.message : "User could not be added."); } }

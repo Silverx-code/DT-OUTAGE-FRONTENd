@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { api } from "@/lib/api";
+import { useStaleData } from "@/lib/use-stale-data";
 import type { Role, UserSummary } from "@/lib/types";
 
 const roleInfo: Record<Role, { label: string; summary: string; access: string[] }> = {
@@ -16,6 +17,7 @@ const roleInfo: Record<Role, { label: string; summary: string; access: string[] 
 export default function ProfilePage() {
   const [user, setUser] = useState<UserSummary | null>(null);
   const [error, setError] = useState("");
+  useStaleData("/me", setUser);
   useEffect(() => { api.get<UserSummary>("/me").then(setUser).catch(() => setError("Your profile could not be loaded.")); }, []);
   const info = user ? roleInfo[user.role] : null;
 

@@ -5,6 +5,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { api } from "@/lib/api";
+import { useStaleData } from "@/lib/use-stale-data";
 import type { ChallengeCategory, DtMaster, FaultCategory } from "@/lib/types";
 
 type LookupForm = { name: string; sortOrder: string };
@@ -20,6 +21,9 @@ export default function DataManagementPage() {
   const [challenge, setChallenge] = useState<LookupForm>({ name: "", sortOrder: "0" });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  useStaleData("/dt-master/admin/all", setTransformers);
+  useStaleData("/lookups/admin/fault-categories", setFaults);
+  useStaleData("/lookups/admin/challenge-categories", setChallenges);
 
   async function load() {
     try {

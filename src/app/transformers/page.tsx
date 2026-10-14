@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { api } from "@/lib/api";
+import { useStaleData } from "@/lib/use-stale-data";
 import type { DtMaster, DtOutage } from "@/lib/types";
 
 export default function TransformersPage() {
@@ -11,17 +12,13 @@ export default function TransformersPage() {
   const [outTransformers, setOutTransformers] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
+  const restoreOutageCache = useCallback((outages: DtOutage[]) => setOutTransformers(new Set(outages.map((outage) => outage.dtId))), []);
+  useStaleData("/dt-master", setTransformers);
+  useStaleData("/outages?status=OUT", restoreOutageCache);
 
   useEffect(() => {
-    Promise.all([
-      api.get<DtMaster[]>("/dt-master"),
-      api.get<DtOutage[]>("/outages?status=OUT"),
-    ])
-      .then(([directory, activeOutages]) => {
-        setTransformers(directory);
-        setOutTransformers(new Set(activeOutages.map((outage) => outage.dtId)));
-      })
-      .catch(() => setError("Transformer directory could not be loaded."));
+    api.get<DtMaster[]>("/dt-master").then(setTransformers).catch(() => setError("Transformer directory could not be loaded."));
+    api.get<DtOutage[]>("/outages?status=OUT").then((activeOutages) => setOutTransformers(new Set(activeOutages.map((outage) => outage.dtId)))).catch(() => setError("Active outage status could not be refreshed."));
   }, []);
 
   const filtered = useMemo(() => {
