@@ -1,4 +1,5 @@
 import { Icon } from "./icon";
+import Link from "next/link";
 
 interface TopHeaderProps {
   title: string;
@@ -7,7 +8,7 @@ interface TopHeaderProps {
 
 export function TopHeader({ title, subtitle }: TopHeaderProps) {
   return (
-    <header className="fixed top-0 w-full z-50 pt-safe bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+    <header className="fixed top-0 z-40 w-full pt-safe bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] lg:left-64 lg:w-[calc(100%-16rem)]">
       <div className="h-20 px-gutter flex flex-col justify-center gap-space-xs">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-space-xs">
@@ -17,15 +18,9 @@ export function TopHeader({ title, subtitle }: TopHeaderProps) {
             </span>
           </div>
           <div className="flex items-center gap-space-sm">
-            <a
-              href="/forgot-password"
-              className="text-label-sm font-semibold text-primary underline underline-offset-2"
-            >
-              Forgot password?
-            </a>
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+            <Link href="/profile" aria-label="Your profile" className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
               <Icon name="person" size={18} className="text-on-primary" />
-            </div>
+            </Link>
           </div>
         </div>
         <div className="flex items-center justify-between">

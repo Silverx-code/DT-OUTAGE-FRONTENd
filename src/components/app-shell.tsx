@@ -12,16 +12,16 @@ interface AppShellProps {
 
 export function AppShell({ title, subtitle, children, hideNav }: AppShellProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-surface">
+    <div className="min-h-screen bg-surface lg:pl-64">
       <TopHeader title={title} subtitle={subtitle} />
       <main
-        className={`flex flex-col relative w-full pt-20 bg-surface min-h-screen ${
-          hideNav ? "pb-8" : "pb-20"
+        className={`relative flex min-h-screen w-full flex-col bg-surface pt-20 ${
+          hideNav ? "pb-8" : "pb-20 lg:pb-8"
         }`}
       >
         {children}
       </main>
-      {!hideNav && <BottomNav />}
+      <BottomNav hideMobile={hideNav} />
     </div>
   );
 }
