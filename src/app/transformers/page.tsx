@@ -4,16 +4,23 @@ import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { Icon } from "@/components/icon";
 import { api } from "@/lib/api";
-import type { DtMaster } from "@/lib/types";
+import type { DtMaster, DtOutage } from "@/lib/types";
 
 export default function TransformersPage() {
   const [transformers, setTransformers] = useState<DtMaster[]>([]);
+  const [outTransformers, setOutTransformers] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    api.get<DtMaster[]>("/dt-master")
-      .then(setTransformers)
+    Promise.all([
+      api.get<DtMaster[]>("/dt-master"),
+      api.get<DtOutage[]>("/outages?status=OUT"),
+    ])
+      .then(([directory, activeOutages]) => {
+        setTransformers(directory);
+        setOutTransformers(new Set(activeOutages.map((outage) => outage.dtId)));
+      })
       .catch(() => setError("Transformer directory could not be loaded."));
   }, []);
 
@@ -42,7 +49,9 @@ export default function TransformersPage() {
             <article key={dt.dtId} className="rounded-xl bg-surface-container-lowest p-space-md shadow-sm">
               <div className="flex items-start justify-between gap-space-sm">
                 <div><p className="text-label-sm font-bold text-primary">{dt.dtCode}</p><h3 className="text-body-lg font-semibold">{dt.dtName}</h3></div>
-                <span className="rounded bg-green-100 px-2 py-1 text-label-sm font-bold text-green-700">Active</span>
+                <span className={`rounded px-2 py-1 text-label-sm font-bold ${outTransformers.has(dt.dtId) ? "bg-error-container text-error" : "bg-green-100 text-green-700"}`}>
+                  {outTransformers.has(dt.dtId) ? "Active outage" : "No active outage"}
+                </span>
               </div>
               <p className="mt-space-sm text-body-sm text-on-surface-variant">{dt.businessUnit} · {dt.undertaking}</p>
               <p className="text-body-sm text-on-surface-variant">{dt.feeder} · {dt.capacityKva} kVA · Band {dt.supplyBand}</p>
