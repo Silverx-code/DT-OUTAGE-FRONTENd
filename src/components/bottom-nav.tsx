@@ -75,7 +75,7 @@ export function BottomNav({ hideMobile = false }: { hideMobile?: boolean }) {
         {isAdmin && <Link href="/access-control" aria-current={pathname?.startsWith("/access-control") ? "page" : undefined} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-body-md font-semibold ${pathname?.startsWith("/access-control") ? "bg-primary-fixed text-on-primary-fixed-variant" : "text-on-surface-variant hover:bg-surface-container-low"}`}><Icon name="admin_panel_settings" size={20}/>Access Control</Link>}
         {isAdmin && <Link href="/data-management" aria-current={pathname?.startsWith("/data-management") ? "page" : undefined} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-body-md font-semibold ${pathname?.startsWith("/data-management") ? "bg-primary-fixed text-on-primary-fixed-variant" : "text-on-surface-variant hover:bg-surface-container-low"}`}><Icon name="database" size={20}/>Data Management</Link>}
       </div>
-      <Link href="/profile" className={`flex items-center gap-3 rounded-xl px-3 py-3 ${pathname === "/profile" ? "bg-primary-fixed text-on-primary-fixed-variant" : "text-on-surface-variant hover:bg-surface-container-low"}`}><Icon name="person" size={20}/><span className="text-body-md font-semibold">My Profile</span></Link>
+      <Link href="/profile" className={`flex items-center rounded-xl px-3 py-3 ${pathname === "/profile" ? "bg-primary-fixed text-on-primary-fixed-variant" : "text-on-surface-variant hover:bg-surface-container-low"}`}><span className="text-body-md font-semibold">My Profile</span></Link>
     </aside>
     </>
   );

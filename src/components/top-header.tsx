@@ -1,6 +1,3 @@
-import { Icon } from "./icon";
-import Link from "next/link";
-
 interface TopHeaderProps {
   title: string;
   subtitle: string;
@@ -9,21 +6,7 @@ interface TopHeaderProps {
 export function TopHeader({ title, subtitle }: TopHeaderProps) {
   return (
     <header className="fixed top-0 z-40 w-full pt-safe bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] lg:left-64 lg:w-[calc(100%-16rem)]">
-      <div className="h-20 px-gutter flex flex-col justify-center gap-space-xs">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-space-xs">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-label-sm text-primary uppercase tracking-wider">
-              Online - Synced
-            </span>
-          </div>
-          <div className="flex items-center gap-space-sm">
-            <Link href="/profile" aria-label="Your profile" className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-              <Icon name="person" size={18} className="text-on-primary" />
-            </Link>
-          </div>
-        </div>
-        <div className="flex items-center justify-between">
+      <div className="flex min-h-20 items-center px-gutter py-3">
           <div className="flex flex-col">
             <h1 className="text-headline-md text-on-surface leading-none">
               {title}
@@ -32,13 +15,6 @@ export function TopHeader({ title, subtitle }: TopHeaderProps) {
               {subtitle}
             </span>
           </div>
-          <button
-            aria-label="Emergency signal"
-            className="w-11 h-11 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg bg-surface-container-high text-secondary hover:bg-surface-container-highest transition-colors"
-          >
-            <Icon name="warning" size={20} />
-          </button>
-        </div>
       </div>
     </header>
   );
